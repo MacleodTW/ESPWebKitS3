@@ -18,7 +18,7 @@ Usage:
 02. Flash ESP32-S3 dongle with the tool inside zip
 03. Plug ESP32-S3 dongle to recycle power
 04. Phone or PC WiFi connect to "PS_WiFi" SSID, password is "password"
-05. Use browser to https://10.1.1.1/dns (Contiue insecure)
+05. Use browser to https://10.1.1.1/dns (Continue insecure)
 06. Set STA WiFi SSID and STA WiFi password then click "Save"
 07. Reload browser get STA IP
 08. PS5 set DNS server to STA IP
