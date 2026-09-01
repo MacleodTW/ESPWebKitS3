@@ -1,4 +1,4 @@
-1. Connect PPIC with USB cable to computer
+1. Connect ESP32-S3 with USB cable to computer
 2. Run flash_download_tool_3.9.11 app
 3. Select as following
     ChipType: ESP32-S3
