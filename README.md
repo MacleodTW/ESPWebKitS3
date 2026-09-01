@@ -3,10 +3,10 @@ ESP32 PS5 Webkit Autoloader is made from VS Code with PlatformIO.
 It contains DNS filter configuration and provide PS5 Webkit Autoloader web pages
 ESPWebKitS3 has tested on ESP32-S3FN8 dongle with PS5 firmware 10.01
 
-ESP32-S3 Dongle
+ESP32-S3 Dongle<BR>
 ![image](https://github.com/MacleodTW/ESPWebKitS3/blob/main/.github/ESP32%20S3%20Dongle.png)
 
-WiFi/DNS configuration
+WiFi/DNS configuration<BR>
 ![image](https://github.com/MacleodTW/ESPWebKitS3/blob/main/.github/ESP32%20S3%20Dashboard.png)
 
 Requirement:<BR>
