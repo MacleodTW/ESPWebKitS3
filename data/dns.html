@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Dashboard</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 2rem;
+            background: #f4f4f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .list-group {
+            margin-bottom: 1.5rem;
+        }
+
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            font-family: monospace;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        input[type="text"] {
+            margin-bottom: 10px;
+            font-family: system-ui, sans-serif;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .checkbox-container input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Button layout and styles */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .btn-save {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .btn-save:hover {
+            background: #0056b3;
+        }
+
+        .btn-default {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .btn-default:hover {
+            background: #c82333;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            background: #eee;
+            font-size: 0.9rem;
+        }
+
+        .dns-info {
+            font-size: 0.9rem;
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Dashboard Settings</h1>
+
+        <div class="list-group">
+            <h2>Network Configuration</h2>
+            <div style="margin-bottom: 15px;">
+                <span class="status-badge" id="staIpDisplay">STA IP: Loading...</span>
+            </div>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="enableAp" checked>
+                <label for="enableAp">Enable AP</label>
+            </div>
+
+            <label class="help-text">STA WiFi SSID</label>
+            <input type="text" id="wifiSsid" placeholder="Enter WiFi SSID">
+
+            <label class="help-text">STA WiFi Password</label>
+            <input type="password" id="wifiPass" placeholder="Enter WiFi Password">
+
+            <label class="help-text" style="margin-top: 15px;">Upstream DNS Server<BR>(Leave as 0.0.0.0 to use STA DHCP DNS)</label>
+            <input type="text" id="upstreamDns" placeholder="e.g., 8.8.8.8 or 0.0.0.0">
+            <span class="dns-info" id="actualDnsDisplay"></span>
+        </div>
+
+        <div class="list-group">
+            <h2>Block List<BR>(Block Domain)</h2>
+            <span class="help-text">One domain per line<BR>(e.g., ads.example.com)</span>
+            <textarea id="blockList"></textarea>
+        </div>
+
+        <div class="list-group">
+            <h2>White List<BR>(Bypass Block)</h2>
+            <span class="help-text">One domain per line<BR>(e.g., safe.example.com)</span>
+            <textarea id="whiteList"></textarea>
+        </div>
+
+        <div class="list-group">
+            <h2>Rewrite List<BR>(Custom DNS)</h2>
+            <span class="help-text">Format: router.local,192.168.1.1<BR>(0.0.0.0 to ESP IP)</span>
+            <textarea id="rewriteList"></textarea>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-save" onclick="saveSettings()">Save</button>
+            <button class="btn-default" onclick="loadDefaults()">Default</button>
+        </div>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        // Fetch existing config on load
+        window.onload = async () => {
+            try {
+                const res = await fetch('/api/dns');
+                if (res.ok) {
+                    const data = await res.json();
+
+                    document.getElementById('enableAp').checked = data.enable_ap !== false;
+                    document.getElementById('wifiSsid').value = data.wifi_ssid || '';
+                    document.getElementById('wifiPass').value = data.wifi_pass || '';
+                    document.getElementById('upstreamDns').value = data.upstream_dns || '0.0.0.0';
+
+                    const ipDisplay = document.getElementById('staIpDisplay');
+                    ipDisplay.textContent = "STA IP: " + (data.sta_ip || 'Not Connected');
+                    ipDisplay.style.color = (data.sta_ip && data.sta_ip !== 'Not Connected') ? 'green' : 'red';
+
+                    const actualDnsDisplay = document.getElementById('actualDnsDisplay');
+                    if (data.upstream_dns === '0.0.0.0' && data.actual_dns && data.actual_dns !== '0.0.0.0') {
+                        actualDnsDisplay.textContent = "Currently using DHCP assigned DNS: " + data.actual_dns;
+                    } else {
+                        actualDnsDisplay.textContent = "";
+                    }
+
+                    document.getElementById('blockList').value = data.block ? data.block.join('\n') : '';
+                    document.getElementById('whiteList').value = data.white ? data.white.join('\n') : '';
+
+                    let rewriteStr = '';
+                    if (data.rewrite) {
+                        for (const [domain, ip] of Object.entries(data.rewrite)) {
+                            rewriteStr += `${domain},${ip}\n`;
+                        }
+                    }
+                    document.getElementById('rewriteList').value = rewriteStr.trim();
+                }
+            } catch (e) {
+                console.error("Failed to fetch settings", e);
+            }
+        };
+
+        // Apply defaults immediately and reboot
+        async function loadDefaults() {
+            if (confirm("Are you sure you want to clear all settings, restore defaults, and reboot the device?")) {
+
+                const statusEl = document.getElementById('status');
+                statusEl.textContent = "Restoring defaults and rebooting...";
+                statusEl.style.color = "black";
+
+                try {
+                    // Directly call the factory reset API which deletes the config file and reboots the ESP32
+                    const res = await fetch('/api/factory_reset', {
+                        method: 'POST'
+                    });
+
+                    if (res.ok) {
+                        statusEl.textContent = "Defaults restored! Rebooting the device... Please wait.";
+                        statusEl.style.color = "green";
+
+                        // Reload the page after 5 seconds to give the ESP32 time to reboot
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 5000);
+
+                    } else {
+                        statusEl.textContent = "Error triggering factory reset.";
+                        statusEl.style.color = "red";
+                    }
+                } catch (e) {
+                    statusEl.textContent = "Network error while restoring defaults.";
+                    statusEl.style.color = "red";
+                }
+            }
+        }
+
+        // Save settings to ESP32
+        async function saveSettings() {
+            const enable_ap = document.getElementById('enableAp').checked;
+            const wifi_ssid = document.getElementById('wifiSsid').value.trim();
+            const wifi_pass = document.getElementById('wifiPass').value.trim();
+            const upstream_dns = document.getElementById('upstreamDns').value.trim() || '0.0.0.0';
+
+            const block = document.getElementById('blockList').value.split('\n').map(s => s.trim()).filter(s => s);
+            const white = document.getElementById('whiteList').value.split('\n').map(s => s.trim()).filter(s => s);
+
+            const rewrite = {};
+            const rewriteLines = document.getElementById('rewriteList').value.split('\n');
+            rewriteLines.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length === 2 && parts[0].trim() && parts[1].trim()) {
+                    rewrite[parts[0].trim()] = parts[1].trim();
+                }
+            });
+
+            const payload = { enable_ap, wifi_ssid, wifi_pass, upstream_dns, block, white, rewrite };
+
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = "Saving...";
+            statusEl.style.color = "black";
+
+            try {
+                const res = await fetch('/api/dns', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    statusEl.textContent = "Settings saved! Changes have been applied immediately.";
+                    statusEl.style.color = "green";
+                } else {
+                    statusEl.textContent = "Error saving settings.";
+                    statusEl.style.color = "red";
+                }
+            } catch (e) {
+                statusEl.textContent = "Network error while saving settings.";
+                statusEl.style.color = "red";
+            }
+        }
+    </script>
+</body>
+
+</html>
