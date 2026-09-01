@@ -24,7 +24,6 @@ Usage:
 08. PS5 set DNS server to STA IP
 09. PS5 Settings -> Guide & Tips, Health and Safety, and Other information -> User's Guide -> If it shows security xxx click "Yes"
 10. Click jailbreak. After all is done, it shows "Payload Manager" and "Webkit Autoloader Installer" buttons to send payload
-
 <BR>
 
 Compile:
@@ -32,6 +31,7 @@ Compile:
 02. PlatformIO open ESPWebKitS3 root directory
 03. Build: Full Clean or Clean -> Platform: Build Filesystem Image -> Build: Build
 04. All images in ESPWebKitS3 flash directory
+<BR>
 
 Credits:<BR>
 。[itsPLK](https://github.com/itsplk) — [ps5-webkit-autoloader](https://github.com/itsPLK/ps5-webkit-autoloader)<BR>
