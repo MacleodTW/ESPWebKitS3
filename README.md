@@ -25,6 +25,8 @@ Usage:
 09. PS5 Settings -> Guide & Tips, Health and Safety, and Other information -> User's Guide -> If it shows security xxx click "Yes"
 10. Click jailbreak. After all is done, it shows "Payload Manager" and "Webkit Autoloader Installer" buttons to send payload
 
+<BR>
+
 Compile:
 01. VS Code with PlatformIO installed
 02. PlatformIO open ESPWebKitS3 root directory
@@ -32,8 +34,8 @@ Compile:
 04. All images in ESPWebKitS3 flash directory
 
 Credits:<BR>
-。[itsPLK](https://github.com/itsplk) — [ps5-webkit-autoloader](https://github.com/itsPLK/ps5-webkit-autoloader)
-。[idlesauce](https://github.com/idlesauce) — [umtx2](https://github.com/idlesauce/umtx2)
-。[jordyidk](https://github.com/jordyidk) — [slopkit](https://github.com/jordyidk/slopkit)
-。[soniciso1](https://github.com/soniciso1) — [pooP2JB](https://github.com/soniciso1/pooP2JB)
-。[john-tornblom](https://github.com/john-tornblom) — [ps5-payload-sdk](https://github.com/ps5-payload-dev/sdk/) and [elfldr](https://github.com/ps5-payload-dev/elfldr)
+。[itsPLK](https://github.com/itsplk) — [ps5-webkit-autoloader](https://github.com/itsPLK/ps5-webkit-autoloader)<BR>
+。[idlesauce](https://github.com/idlesauce) — [umtx2](https://github.com/idlesauce/umtx2)<BR>
+。[jordyidk](https://github.com/jordyidk) — [slopkit](https://github.com/jordyidk/slopkit)<BR>
+。[soniciso1](https://github.com/soniciso1) — [pooP2JB](https://github.com/soniciso1/pooP2JB)<BR>
+。[john-tornblom](https://github.com/john-tornblom) — [ps5-payload-sdk](https://github.com/ps5-payload-dev/sdk/) and [elfldr](https://github.com/ps5-payload-dev/elfldr)<BR>
