@@ -1,13 +1,14 @@
 # ESPWebKitS3
-ESP32 PS5 Webkit Autoloader is made from VS Code with PlatformIO.<BR>
-It contains DNS filter configuration and provide PS5 Webkit Autoloader web pages<BR>
-ESPWebKitS3 has tested on ESP32-S3FN8 dongle with PS5 firmware 10.01<BR>
+ESP32 for PS5 is made from VS Code with PlatformIO.<BR>
+It contains DNS filter configuration and provide PS5 payload manager<BR>
+ESPWebKitS3 has tested on ESP32-S3FN8 dongle with PS5 firmware 13.20<BR>
 
 ESP32-S3 Dongle<BR>
 ![image](https://github.com/MacleodTW/ESPWebKitS3/blob/main/.github/ESP32%20S3%20Dongle.png)
 
 WiFi/DNS configuration<BR>
 ![image](https://github.com/MacleodTW/ESPWebKitS3/blob/main/.github/ESP32%20S3%20Dashboard.png)
+
 
 Requirement:<BR>
 。ESP32 S3 8MB flash or more
@@ -34,6 +35,7 @@ Compile:
 <BR>
 
 Credits:<BR>
+。[ntfargo](https://github.com/ntfargo) - [Relapse-Exploit](https://github.com/ntfargo/Relapse-Exploit)<BR>
 。[itsPLK](https://github.com/itsplk) — [ps5-webkit-autoloader](https://github.com/itsPLK/ps5-webkit-autoloader)<BR>
 。[idlesauce](https://github.com/idlesauce) — [umtx2](https://github.com/idlesauce/umtx2)<BR>
 。[jordyidk](https://github.com/jordyidk) — [slopkit](https://github.com/jordyidk/slopkit)<BR>
